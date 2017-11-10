@@ -1,0 +1,24 @@
+/********************************************************************
+*	@program name : doubly linked list
+*	@anthor  name : rack
+*	@mail address : 1740234864@qq.com
+*	@function     : doubly linked list
+*	@last date    : 2017.10.21 22:59
+*********************************************************************/
+
+/*头文件*/
+#include<stdio.h>
+#include<stdio.h>
+
+/*函数状态码*/
+#define TRUE        1
+#define FALSE       0
+#define OK          1
+#define ERROR       0
+#define INFEASIBLE -1
+#define OVERFLOW   -2
+
+/*类型定义*/
+typedef int Status ;
+typedef int Elemtype ;
+

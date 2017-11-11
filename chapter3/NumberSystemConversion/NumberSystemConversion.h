@@ -50,7 +50,7 @@ typedef int Elemtype ;
 /********************************************************************
  *结构体
 *********************************************************************/
-typedef struct {                                                    //构建数制转换栈的结构体 
+typedef struct {                                                    //构建数制转换栈的结构体
 	int *base    ;                                              //栈基指针
 	int *top     ;                                              //栈顶指针
 	int stacksize;                                              //栈长度
@@ -60,8 +60,11 @@ typedef struct {                                                    //构建数�
  *函数的表示
 *********************************************************************/
 
+Status EmptyStack(SqStack *S)                          ;
+Status ClearStack(SqStack *S)                          ;
 Status InitStack(SqStack *S)                           ;            //初始化栈
 Status Push(SqStack *S , Elemtype e)                   ;            //插入元素，进栈
 Status Pop(SqStack *S , Elemtype *e)                   ;            //删除元素，退栈
+Status DestroyStack(SqStack *S)                        ;
 void Conversion(SqStack *S , Elemtype n , Elemtype x)  ;            //数制转换
 #endif

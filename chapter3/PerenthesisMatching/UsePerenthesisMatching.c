@@ -19,10 +19,10 @@ int main()
 {
 	char str[100] , enter ;
 	SqStack *s ;
-	InitStack(s);                            //初始化栈
+	InitStack(s);                             //初始化栈
 	printf("请输入需要匹配的字符串：\n");
 	scanf("%s", str);                         //字符串
 	scanf("%c" , enter);                      //字符串中的单个字符
-	Matching(s , str);                       //匹配运算
-	return 0 ;	
-} 
+	Matching(s , str);                        //匹配运算
+	return 0 ;
+}

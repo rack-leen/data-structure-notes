@@ -52,31 +52,31 @@
  *自定义类型
 *********************************************************************/
 typedef int Status   ;
-typedef int Elemtype ;
+typedef char Elemtype ;
 
 /********************************************************************
  *结构体
-*********************************************************************/
-typedef struct {                                                    //构建数制转换栈的结构体 
-	int *base    ;                                                    //栈基指针
-	int *top     ;                                                    //栈顶指针
-	int stacksize;                                                    //栈长度
-}SqStack;                                                           //栈类型
+********************************************************************/
+typedef struct {                                                   //构建数制转换栈的结构体
+	Elemtype *base    ;                                              //栈基指针
+	Elemtype *top     ;                                              //栈顶指针
+	int stacksize;                                                   //栈长度
+}SqStack;                                                          //栈类型
 
 /********************************************************************
  *函数的表示
 *********************************************************************/
 
-Status InitStack(SqStack *S)                                 ;      //初始化栈
-Status DestroyStack(SqStack *S)                              ;      //销毁栈
-Status ClearStack(SqStack *S)                                ;      //清空栈
-Status EmptyStack(SqStack *S)                                ;      //判断栈是否为空
-Status LengthStack(SqStack *S)                               ;      //判断长度
-Status GetTop(SqStack *S , Elemtype *e)                      ;      //
-Status Push(SqStack *S , Elemtype e)                         ;      //插入元素，进栈
-Status Pop(SqStack *S , Elemtype *e)                         ;      //删除元素，退栈
-void  LineEdit()                                             ;
-Status TraveseStack(SqStack *S , Status (*visit)(Elemtype e));      //遍历栈
-Status visit(Elemtype e)                                     ;      //输出遍历结果 
+Status InitStack(SqStack *S);                                      //初始化栈
+Status DestroyStack(SqStack *S);                                   //销毁栈
+Status ClearStack(SqStack *S);                                     //清空栈
+//Status EmptyStack(SqStack *S);                                   //判断栈是否为空
+//Status LengthStack(SqStack *S);                                  //判断长度
+//Status GetTop(SqStack *S , Elemtype *e);                         //
+Status Push(SqStack *S , Elemtype e);                              //插入元素，进栈
+Status Pop(SqStack *S , Elemtype *e);                              //删除元素，退栈
+void   LineEdit(SqStack *S);
+//Status TraveseStack(SqStack *S , Status (*visit)(Elemtype e));   //遍历栈
+//Status visit(Elemtype e);                                        //输出遍历结果
 
 #endif

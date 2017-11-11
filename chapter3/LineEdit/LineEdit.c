@@ -34,129 +34,136 @@
 *********************************************************************/
 Status InitStack(SqStack *S)
 {
-  /*初始化栈*/
+  //初始化栈
   S->base = (Elemtype *)malloc(STACK_INIT_SIZE*sizeof(Elemtype));   //为栈分配内存
-  if(!S->base) exit(OVERFLOW)                                   ;   //如果分配失败
-  S->top = S->base                                              ;   //将栈顶与栈基相等，栈置空
-  S->stacksize = STACK_INIT_SIZE                                ;   //栈长度为初始分配量
-  return OK                                                     ;
+  if(!S->base) exit(OVERFLOW);                                      //如果分配失败
+  S->top = S->base;                                                 //将栈顶与栈基相等，栈置空
+  S->stacksize = STACK_INIT_SIZE;                                   //栈长度为初始分配量
+  return OK;
 }
 
 Status DestroyStack(SqStack *S)
 {
-  /*销毁栈*/
-  if(S->top != S->base)
-  free(S->base)                                                 ;   //释放栈
-  S->top       == NULL                                          ;
-  S->base      == NULL                                          ;
-  S->stacksize == 0                                             ;
-  return OK                                                     ;
+  //销毁栈
+  S->top = S->base ;
+  free(S->base);                                                    //释放栈
+  S->top       = NULL;
+  S->base      = NULL;
+  return OK;
 }
 
 Status ClearStack(SqStack *S)
 {
-  /*清空栈*/
-  S->top = S->base                                              ;   //清空栈中元素
-  return OK                                                     ; 
+  //清空栈
+  S->top = S->base;                                                 //清空栈中元素
+  return OK;
 }
 
-
+/*
 Status EmptyStack(SqStack *S)
 {
-  /*判断栈是否为空*/
+  //判断栈是否为空
   if(S->top == S->base)
     return TRUE                                                 ;   //也可以用bool
-  else 
+  else
     return FALSE                                                ;
 }
-
+*/
+/*
 Status LengthStack(SqStack *S)
 {
-  /*判断长度*/
+  //判断长度
   return S->top - S->base                                       ;   //返回栈顶减去栈基
 }
-
-Status GetTop(SqStack *S , Elemtype *e)
+*/
+/*Status GetTop(SqStack *S , Elemtype *e)
 {
-  /*得到栈顶元素*/
+  //得到栈顶元素
   if(S->top == S->base)                                             //先判断栈是否为空，为空，则没有栈顶元素
     return ERROR                                                ;
-  *e = *(S->top - 1)                                            ;   //返回栈顶元素（栈顶指针-1） 
+  *e = *(S->top - 1)                                            ;   //返回栈顶元素（栈顶指针-1）
   return OK                                                     ;
 }
-
+*/
 Status Push(SqStack *S , Elemtype e)
 {
-  /*插入元素*/
-  if(S->top - S->base >= S->stacksize)                              //首先判断是否栈满
+  //插入元素
+  if((S->top-S->base)>=S->stacksize)
   {
-    /*追加存储空间*/
-    S->base = (Elemtype *)realloc(S->base ,
-        (S->stacksize + STACK_INCREMENT)*sizeof(Elemtype))      ;   //追加存储空间
-    S->top = S->base + S->stacksize                             ;  
-    S->stacksize += STACK_INCREMENT                             ;  
+    S->base = (Elemtype *)realloc(S->base , (S->stacksize+STACK_INCREMENT)*sizeof(Elemtype));
+    if(!S->base)
+    {
+      exit(OVERFLOW);
+    }
+    S->top = S->base + S->stacksize ;
+    S->stacksize += STACK_INCREMENT ;
   }
-  *S->top++ = e                                                 ;   //将e赋值给栈顶
-  return OK                                                     ; 
+  *S->top++ = e ;
+  return OK ;
 }
-
 Status Pop(SqStack *S , Elemtype *e)
 {
-  /*删除元素*/
+  //删除元素
   if(S->top == S->base) //如果栈为空
-    return ERROR                                                ;
-  else    //元素不为空，则删除
-    *e = *--S->top                                              ;
-  return OK                                                     ;
+    return ERROR;
+    //元a素不为空，则删除
+    *e = *--S->top;
+  return OK;
 }
 
-Status TraveseStack(SqStack *S  , Status (*visit)(Elemtype))
+/*Status TraveseStack(SqStack *S  , Status (*visit)(Elemtype))
 {
-  Elemtype *b = S->base                                         ;
-  Elemtype *t = S->top                                          ;
-  while(b < t)
+  Elemtype *b = S->base;
+  Elemtype *t = S->top;
+ while(b < t)
   {
-    visit(*b++)                                                 ;
+    visit(*b++);
   }
-  printf("\n")                                                  ;
-  return OK                                                     ;
+  printf("\n");
+  return OK;
 }
 
 Status visit(Elemtype c)
 {
-  printf("%d",c)                                                ;   //不能与e相同
-  return OK                                                     ;
+  printf("%d",c);   //不能与e相同
+  return OK;
 }
-
-void LineEdit()
+*/
+void LineEdit(SqStack *S)
 {
   /*行编辑实现函数*/
-  SqStack S                                                     ;  
-  Elemtype c                                                    ;  
-  char ch                                                       ;   //输入的元素
-  /*本次循环将输入的数据从缓存区传入数据区*/
+  Elemtype *p;
+  Elemtype c;
+  Elemtype ch;
+ ch = getchar();
+  //本次循环将输入的数据从缓存区传入数据区
   while(ch != EOF)                                                  //EOF作为全文结束符
   {
-    /*本次循环将输入的数据存入缓存区*/
+    //本次循环将输入的数据存入缓存区
     while(ch != EOF && ch != '\n')
      {
        switch(ch)
        {
-          case '#': Pop(&S , &c)                                ;   //仅当栈非空时退栈,遇到#将前面的字符压出栈
-                  break                                         ;  
-          case '@': ClearStack(&S)                              ;   //重置S为空栈
-                  break                                         ;
-          default : Push(&S,ch)                                 ;  
-                  break                                         ;
+          case '#': Pop(S , &c);                                   //仅当栈非空时退栈,遇到#将前面的字符压出栈
+                  break;
+          case '@': ClearStack(S);                                 //重置S为空栈
+                  break;
+          default : Push(S,ch);
+                  break;
        }
-       ch = getchar()                                           ;   //从终端接收下一个字符
+       ch = getchar();                                             //从终端接收下一个字符
     }
-    ClearStack(&S)                                              ;   //清空栈，将数据传入数据区
-    if(ch != EOF) ch = getchar()                                ;   //满足条件下，从栈中取出字符 
+    p = S->base ;
+    while(p!=S->top)
+    {
+      printf("%c",*p);
+        ++p ;
+    }
+    ClearStack(S);                                                //清空栈，将数据传入数据区
+    if(ch != EOF) ch = getchar();                                 //满足条件下，从栈中取出字符
   }
-  DestroyStack(&S)                                              ;   //销毁栈
 }
 
 /******************************************************************
- *end 
+ *end
 *******************************************************************/

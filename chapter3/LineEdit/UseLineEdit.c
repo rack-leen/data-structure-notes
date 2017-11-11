@@ -35,7 +35,10 @@
 int main()
 {
   /*主函数*/
+  SqStack sq ;
+  int f ;
   printf("请用户输入文本：\n");
-  char ch = 
-  LineEdit();
+  LineEdit(&sq);
+  DestroyStack(&sq);
+  return 0 ;
 }

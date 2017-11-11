@@ -25,8 +25,13 @@
 /********************************************************************
  *函数的实现
 *********************************************************************/
+Status ClearStack(SqStack *S)
+{
+	S->top = S->base ;
+	return OK ;
+}
 
-Status InitStack(SqStack *S)                                      
+Status InitStack(SqStack *S)
 {
 	/*初始化栈,构造空栈*/
 	S->base = (Elemtype *)malloc(STACK_INIT_SIZE*               //分配内存
@@ -40,7 +45,7 @@ Status InitStack(SqStack *S)
 Status Push(SqStack *S , Elemtype e)
 {
 	/*插入元素*/
-	if(S->top >= S->stacksize)                                  //判断栈满.如果栈满，则追加存储空间
+	if((S->top-S->base)>=S->stacksize)                                  //判断栈满.如果栈满，则追加存储空间
 	{
 		S->base = (Elemtype *)realloc(S->base ,
 		(STACK_INCREMENT+S->stacksize)*sizeof(Elemtype));   //追加存储空间
@@ -57,26 +62,42 @@ Status Pop(SqStack *S , Elemtype *e)
 	/*删除元素*/
 	/*判断栈顶指针是否指向0，也就是栈中是否还有元素*/
 	if(S->top == S->base) return ERROR                      ;   //栈中没有元素
-	e = *--S->top                                           ;   //将需要删除的元素赋值给e，由e传出
-	return OK                                               ; 
+	*e = *--S->top                                           ;   //将需要删除的元素赋值给e，由e传出
+	return OK                                               ;
 }
 
+Status DestroyStack(SqStack *S)
+{
+	if(S->top == S->base) return ERROR ;
+	free(S->base);
+	S->top = NULL ;
+	S->base = NULL ;
+	return OK ;
+}
+
+Status EmptyStack(SqStack *S)
+{
+	if(S->top == S->base) return TRUE ;
+	else return FALSE ;
+	return OK ;
+}
 void Conversion(SqStack *S , Elemtype n , Elemtype x)
 {
 	/*数制转换*/
-	int t ;                                                     //保存数制转换的值
+	Elemtype e ;                                                   //保存数制转换的值
 	/*数制转换是倒着数的*/
-	while(n)
-	{
-		t = n % x        ;                                  //先从余数开始
-		Push(S , t)      ;                                  //将转换的数压入栈
+	while(n!=0)
+	{  //入栈，计算
+		e = n%x ;                                                    //先从余数开始
+		Push(S , e)      ;                                     //将转换的数压入栈
 		n /= x           ;                                  //再整除，与平常算数相反
 	}
+
+
 	/*计算完后需要释放栈*/
-	while(S->top != 0)                                          //如果栈不空
+	while(!EmptyStack(S))                                          //如果栈不空
 	{
-		Pop(S , &t)      ;
-		printf("%d", t)  ;                                  //栈是用来存放正在计算的数据，计算完后需要释放栈
+		Pop(S , &e)      ;                                  //退栈，输出
+		printf("%d", e)  ;                                  //栈是用来存放正在计算的数据，计算完后需要释放栈
 	}
 }
-

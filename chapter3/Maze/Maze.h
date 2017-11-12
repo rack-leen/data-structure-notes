@@ -17,7 +17,6 @@
 *GetTop       得到栈顶元素
 *Push         插入元素 进栈
 *Pop          删除元素 退栈
-*Maze         迷宫求解方法
 *TraveseStack 遍历栈
 *visit        输出遍历结果
 *MazePath     迷宫路径

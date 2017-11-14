@@ -1,7 +1,7 @@
 /***************************************************************************************
  *  @file       example.h
  *
- *  @brief      Brief descriptinon of example.h 
+ *  @brief      Brief descriptinon of example.h
  *
  *  @date       2017-11-11 21:39
  *
@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 #define OVERFLOW -2
-#define OK 1 
+#define OK 1
 #define ERROR 0
 #define TRUE 1
 #define FALSE 0
@@ -54,10 +54,10 @@ SqStack S;  //定义一个全局顺序栈
 
 //函数原型
 
-void InitStack(SqStack *S);  //初始化栈
+//void InitStack(SqStack *S);  //初始化栈
 Status StackEmpty(SqStack *S) ; //判断栈空
-void Push(SqStack *S ,SElemType e);  //入栈
+//void Push(SqStack *S ,SElemType e);  //入栈
 Status Pop(SqStack *S ,SElemType *e)  ; //退栈
-void FootPrint();  //留下足迹
-void NextStep(Pos *seat ,int di) ;  //下一步
+//void FootPrint();  //留下足迹
+//void NextStep(Pos *seat ,int di) ;  //下一步
 Status Path(Pos Begin ,Pos End)  ; //探索路径

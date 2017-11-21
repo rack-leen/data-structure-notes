@@ -93,12 +93,12 @@ void InitStackChar(StackChar *S);              //构造运算符栈
 void InitStackFloat(StackFloat *S);            //构造运算数栈
 char GetTopChar(StackChar *S)；                //返回运算符栈顶元素
 char GetTopFloat(StackFloat *S);               //返回运算数栈顶元素
-void PushChar(StackChar *S);                   //运算符入栈
-void PushFloat(StackFloat *S);                 //运算数入栈
-void PopChar(StackChar *S);                    //运算符出栈
-void PopFloat(StackFloat *S);                  //运算数出栈
+void PushChar(StackChar *S , char e);          //运算符入栈
+void PushFloat(StackFloat *S , char e);        //运算数入栈
+void PopChar(StackChar *S , char *e);          //运算符出栈
+void PopFloat(StackFloat *S , char *e);        //运算数出栈
 char EvaluateExpression(char *MyExpression);   //表达式求值函数
-Status ReturnOpOrd(char Aop , char Bop);       //返回Aop与Bop的优先级
+Status ReturnOpOrd(char Op , char TestOp);       //返回Aop与Bop的优先
 float Operate(float a , char theta , float b); //根据theta对a和b进行'+' 、'-' 、'*' 、'/' 、'^'操作
 Status In(char Test , char *TestOp);           //若Test为运算符则返回true，否则返回false
 char precede(char Aop,char Bop);               //根据运算符优先级表返回Aop与Bop之间的优先级

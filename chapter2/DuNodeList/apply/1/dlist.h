@@ -2,7 +2,7 @@
 *	program name : dlist.h
 *	anthor  name : rack
 *	mail address : 1740234864@qq.com
-*	function     : doubly linked list
+*	function     : doubly linked list 双向链表
 *	last date    : 2017.10.21 22:59
 *********************************************************************/
 /************************************************
@@ -48,5 +48,3 @@ int dlist_remove(Dlist *list , DlistElem *element , void **data);//data是指向
 #define dlist_data(element) ((element)->data)//get the data of the element 得到这个元素的数据域
 
 #endif
-
-

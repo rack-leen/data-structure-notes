@@ -3,48 +3,14 @@
 *	anthor 	: rack
 *	date   	: 2017.10.16 9:48 PM
 *	mail   	: 1740234864@qq.com
-*	function: circlelist 
+*	function: circlelist 循环线性表
 **************************************************************/
 
 /*头文件*/
-#include <stdio.h>
-#include <stdlib.h>
+#include "CircleList.h"
 
-/*定义*/
-#define LIST_INIT_SIZE 100									   //初始分配量
-#define LISTINCREMENT  10                                      //分配增量
+/*函数实现*/
 
-/*函数状态码*/
-#define TRUE        1  
-#define FALSE       0
-#define OK          1
-#define ERROR       0
-#define INFEASIBLE -1
-#define OVERFLOW   -2
-
-/*typedef类型*/
-typedef int Status ;
-typedef int Elemtype ;
-
-/*structure*/
-typedef struct CircleNote
-{
-	Elemtype data ;                                             //存储空间基址
-	struct CircleNote *next ;
-}CircleNote , *CircleList ;
-
-/*函数体*/
-Status InitList(CircleList *L);                                 //初始化循环链表
-Status DestroyList(CircleList *L);                              //销毁循环链表
-Status ClearList(CircleList *L);                                //清空循环链表
-Status ListEmpty(CircleList *L);                                //判断是否为空
-Status ListLength(CircleList *L);                               //得到线性表长度
-Status GetElem(CircleList *L , int i , Elemtype *e);            //得到线性表元素 
-Staus Compare(Elemtype e1 , Elemtype e2);
-Status LocateList(CircleList *L , Elemtype e , Status (*compare)(Elemtype , Elemtype) );
-Status PriorElem(CircleList L , Elemtype cur_e , Elemtype *pur_e);
-Status NextElem(CircleList L , Elemtype cur_e , Elemtype *next_e);
-/*函数原型*/
 Status InitList(CircleList *L)                                  //初始化循环链表
 {
 	//操作结果：返回一个空的线性表L
@@ -59,7 +25,7 @@ Status InitList(CircleList *L)                                  //初始化循�
 Status DestroyList(CircleList *L)
 {
 	CircleList p = L , q = L->next ;                            //p指向头结点，q指向头结点的下一个
-	while(p!=L) 
+	while(p!=L)
 	{
 		p->next = q->next ;                                     //p的下一个成为q->next，将q排除了
 		free(q);                                                //将排除的q释放
@@ -67,7 +33,7 @@ Status DestroyList(CircleList *L)
 	}                                                           //q代表p->next与q->next之间的节点，循环一次，删除一个q，知道链表为空
 	free(L);                                                    //释放L
 	L = NULL ;
-	printf("销毁链表成功！");       
+	printf("销毁链表成功！");
 	return OK ;
 }
 
@@ -77,7 +43,7 @@ Status ClearList(CircleList *L)                                 //与DestroyList
 	CircleList p = L , q = L->next ;
 	while(p!=L)
 	{
-		p->next = q->next;           
+		p->next = q->next;
 		free(q);
 		q=p->next;                                              //由于q被删除，链表关系被破坏，于是由p->next来覆盖q的位置，修复关系
 	}
@@ -93,7 +59,7 @@ Status ListEmpty(CircleList *L)
 	CircleList p = L->next ;
 	if(p == L)                                                 //因为p=L->next，p则为L的第二个节点。但是p==L，则是链表空
 		return TRUE ;
-	else 
+	else
 		return ERROR ;
 }
 
@@ -175,7 +141,7 @@ Status NextElem(CircleList L , Elemtype cur_e , Elemtype *next_e)
 		if(p->data = cur_e)                                 //找到数据元素
 		{
 			next_e = p->next-data ;                         //将后继的元素赋值给next_e
-			return next_e ;             
+			return next_e ;
 		}
 		p = p->next ;                                       //遍历
 	}
@@ -195,7 +161,7 @@ Status ListInsert(CircleList *L , int i , Elemtype *e)
 		p = p->next ;
 	}
 	/*找到元素*/
-	CircleList s = (CircleList)maclloc(sizeof(struct CircleList)); 
+	CircleList s = (CircleList)maclloc(sizeof(struct CircleList));
 	s->data = e ;                                          //将e赋值给分配好的空间
 	s->next = p->next ;                                    //s->next本来指向p，加入s元素,则指向p->next
 	p->next = s ;                                          //p->next逆指向s
@@ -208,11 +174,11 @@ Status ListDelete(CircleList L , int i , Elemtype *e)
 	CircleList p = L , q ;                                //p指向头结点，q为表中元素
 	int j = 0 ;
 	if(i < 1 || i > ListLength(L)+1) return ERROR ;
-	while(j < i-1)                 
+	while(j < i-1)
 	{
 		++j ;
 		p = p->next ;
-		
+
 	}
 	q =  p->next ;                                       //表示q被删除,p->next的值赋给q，q被释放
 	p->next = q->next ;                                  //修复链表关系，原本p的下一个为q，现在为q->next
@@ -239,13 +205,4 @@ Status ListTraverse(CircleList L , Status (*visit)(Elemtype))
 	}
 	printf("\n");
 	return OK ;
-}
-
-/*主函数*/
-int main()
-{
-	CircleList L ;
-	Elemtype e . cur_e , pur_e ;
-	InitList(L);
-	ListInsert(L,)
 }

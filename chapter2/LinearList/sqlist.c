@@ -40,7 +40,7 @@ typedef struct
  *
  * ********************************/
 
-Status Initlist(Sqlist *L);
+Status Initlist(Sqlist *L);                                                           //初始化链表
 void Destroylist(Sqlist *L);                                                           //销毁线性表
 void Clearlist(Sqlist *L);                                                               //置空线性表
 Status Listempty(Sqlist *L);                                                          //判断线性表是否为空

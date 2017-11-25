@@ -2,7 +2,7 @@
 *	program name : dlist.c
 *	anthor  name : rack
 *	mail address : 1740234864@qq.com
-*	function     : doubly linked list
+*	function     : doubly linked list 双向链表
 *	last date    : 2017.10.21 22:59
 *********************************************************************/
 /*************************************

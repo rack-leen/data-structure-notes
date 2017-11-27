@@ -501,5 +501,189 @@ Status MoreEvent()
 
 void EventDrived(char *event)  //事件驱动
 {
-  
+  DeleteList(ev , 1 , en); //删除事件表,ev为事件表,en为事件
+  if(en.NType == Arrive)  //事件的类型为客户到达事件
+    *event = 'A' ;     //如果是，则event为到达事件
+  else
+    *event = 'D' ;   //否则返回D
+}
+
+void CustomerArrived()
+{
+  //客户到达事件,事件类型en.NType为0,表示到达事件
+  int durtime . intertime ;  //客户驻留事件与下一个客户到达的时间间隔
+  int Cur_LeftTime , Suc_ArriveTime ; //客户离开时间和客户到达时间
+  int i ;
+
+  ++CustomerNum ;         //客户到达事件发生，客户总数+1
+
+  Random(&durtime , intertime); //生成当前客户办理业务需要时间和下一个客户到达时间间隔的随机数
+  Cur_LeftTime = en.OccurTime + durtime ; //离开时间等于当前事件发生时间+办理业务需要的时间
+  Suc_ArriveTime = en.OccurTime + intertime ; //客户到达时间等于当前事件发生时间+下一个客户到达时间间隔
+
+  //客户信息
+  customer.ArrivedTime = en.OccurTime ;  //记录当前客户信息
+  customer.Duration = durtime ;             //办理业务所需时间
+  customer.Count = CustomerNum ;       //客户总数
+
+  i = Minimum(q);                 //求长度最短队列
+  EnQueue(&q[i] , customer);      //将客户记录插入最短长度队列
+  Show() ;
+
+ //到达事件插入
+  if(Suc_ArriveTime < CloseTime)   //客户到达时间在银行关门时间之内,则将客户到达事件插入事件表
+  {
+    en.OccurTime = Suc_ArriveTime; //发生事件时间为到达时间
+    en.NType = Arrive ;            //发生事件为到达事件
+    OrderInsert(ev , en , cmp) ;   //事件插入事件表
+  }
+
+  //离开事件插入
+  if(LengthQueue(q[i]) == 1)  //设定第i队列的队头客户的离开事件并插入事件表
+  {
+    en.OccurTime = Cur_LeftTime ; //当前发生时间为客户离开时间
+    en.NType = i ;                //事件类型为i
+    OrderInsert(en,ev,cmp) ;     //将当前事件插入事件表
+  }
+}
+
+void CustomerDeparture() //处理客户离开事件 en.NType类型不能为到达事件
+{
+  int i = en.NType ;   //i为当前事件类型
+
+  DeQueue(&q[i],&customer);  //删除第i队列的队头客户
+  Show();
+
+  TotalTime += en.OccurTime - customer.ArrivedTime ; //累计客户逗留时间，当前发生事件时间-客户到达时间
+
+  if(!EmptyQueue(&q[i]))   //如果第i队列非空,设定第i队列的第一个离开事件并插入事件表
+  {
+    GetHead(&q[i] , &customer);  //得到第i队列的队首客户
+    en.OccurTime += customer.Duration ; //当前发生时间为上一个当前时间+客户办理业务时间
+    en.NType = i ;                   //当前事件类型
+    OrderInsert(en,ev,cmp);         //插入事件表
+  }
+}
+
+void Invalid()
+{
+  //运行错误提示
+  printf("运行错误！");
+  exit(OVERFLOW);
+}
+
+void CloseForDay()
+{
+  //银行关闭
+  printf("当天总共有%d个客户，平均逗留时间为%d分钟。\n", CustomerNum , TotalTime / CustomerNum );
+  //平均时间为客户总计时间/客户数量
+}
+
+int cmp(Event a , Event b)  //比较ab两事件发生次序
+{
+  if(a.OccurTime < b.OccurTime) //a比b发生晚
+    return -1 ;
+  if(a.OccurTime == b.OccurTime) //同时发生
+    return 0 ;
+  if(a.OccurTime > b.OccurTime) //a比b早
+    return 1 ;
+}
+
+void Random(int *durtime , int *intertime) //durtime，办理业务持续时间，intertime，下一事件发生的时间间隔
+{
+  //随机事件
+  srand((unsigned)time(NULL));
+  *durtime = rand() % DurationTime + 1 ; //办理业务持续时间
+  *intertime = rand() % IntervalTime + 1 ; //下一个顾客到来的时间间隔
+  //+1防止随机数为0 ， rand()为随机函数
+}
+
+Status OrderInsert(EventList ev , Event en , int (cmp)(Event , Event))  //事件表 ，事件 ，事件比较
+{
+  //顺序插入
+  int i ;
+  EventList p , pre , s ;   //事件表
+
+   pre = ev ;          //pre指向事件表头
+   p = ev->next ;     //p指向第一个事件
+
+   while(p && cmp(en , p->data) == 1) //当事件表存在，用cmp函数查找在事件表中应该插入的位置
+   { //遍历事件表
+     pre = p ;                   //pre指向p
+     p = p->next ;               //p指向下一个
+   }
+
+   s = (LinkList)malloc(sizeof(LNode)); //分配动态内存
+   if(!s)
+    exit(OVERFLOW) ;      //内存分配失败
+
+    s->data = en ;         //将需要插入的事件放入将要插入的节点中
+    s->next = p->next ;    //插入时的逻辑关系
+    p->next = s ;          //插入后的逻辑关系
+
+    return OK ;
+}
+
+int Minimum()           //求长度最短队列
+{
+  //四个窗口队列的长度
+  int i1 = LengthQueue(q[1]);
+  int i2 = LengthQueue(q[2]);
+  int i3 = LengthQueue(q[3]);
+  int i4 = LengthQueue(q[4]);
+
+  //分别求i1,i2,i3,i4为最小队列
+  if(i1 <= i2 && i1 <= i3 && i1 <= i4)
+    return 1 ;
+  if(i2 < i1 && i2 <= i3 && i2 <= i4)
+    return 2 ;
+  if(i3 < i1 && i3 <= i2 && i3 <= i4)
+    return 3 ;
+  if(i4 < i1 && i4 <= i2 && i4 <= i3)
+    return 4 ;
+}
+
+void Show()   //显示当前队列排队情况
+{
+  int i ;
+  QNodePtr p ;   //记录到来的客户是第几个
+
+  system("clear");   //windows下为system("cls")；
+
+  for(i = 1 ; i <= 4 ; i++)
+  {
+    for(p=q[i].front ; p ; p=p->next)  //p为事件表节点，事件表节点p为第i队列的队首
+    {
+      if(p == q[i].front)    //如果节点p为第i队列的队首，表示到来的客户是在队首
+      {
+        if(i == 1)
+          printf("柜台1  ：  ");
+        if(i == 2)
+          printf("柜台2  ：  ");
+        if(i == 3)
+          printf("柜台3  ：  ");
+        if(i == 4)
+          printf("柜台4  ：  ");
+      }
+      else          //如果到来的客户没有在队首，则计数
+        printf("(%03d)",p->data.Count);
+      if(p = q[i].rear) //如果p在队尾
+        printf("\n");
+    }
+  }
+  //Wait(SleepTime); //休眠等待
+}
+
+/*void BankSimulation1()
+{
+  OpenForDay();   //银行开门
+  while(!ListEmpty(ev))  //如果事件表不为空
+  {
+    DeleteList(ev , 1 ,en);
+    if(en.NType == Arrive)
+      CustomerArrived();
+    else
+      CustomerDeparture();
+  }
+  printf("当天总共有%d个客户，平均逗留时间为%d分钟。\n",CustomerNum , TotalTime / CustomerNum);
 }

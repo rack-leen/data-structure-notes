@@ -67,6 +67,7 @@ Status ClearString(SString S);                                      //清空字�
 Status ConCat(SString T , SString S1 , SString S2);                 //S1.S2连接，用T返回
 Status SubString(SString Sub ,SString S , int pos , int len);       //Sub返回S串的第pos个字符起长度为len的子串
 int    Index(SString S , SString T , int pos);                      //返回T在第pos个字符后出现的第一次出现的位置，不存在则返回0
+int    Index_1(SString S , SString T , int pos);                    //模式匹配字符串
 Status Replace(SString S , SString T , SString V);                  //用V替换在主串S中出现的所有T子串
 Status StrInsert(SString S , int pos , SString T);                  //在主串S的第pos字符之前插入T子串
 Status StrDelete(SString S , int pos , int len);                    //从主串S中删除第pos字符起长度为len的子串
